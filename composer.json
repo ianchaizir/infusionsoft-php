@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "guzzlehttp/guzzle": "~6.1",
+        "guzzlehttp/guzzle": "~5.3",
         "lstrojny/fxmlrpc": "^0.14.0",
         "psr/log": "~1.0",
         "php-http/guzzle6-adapter": "^1.1",

@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Message\Request;
 use GuzzleHttp\Middleware;
 use Psr\Log\LoggerInterface;
 
