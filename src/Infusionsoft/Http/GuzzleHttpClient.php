@@ -2,12 +2,11 @@
 
 namespace Infusionsoft\Http;
 
-use fXmlRpc\Transport\HttpAdapterTransport;
+use fXmlRpc\Transport\GuzzleBridge;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Message\Request;
 use GuzzleHttp\Middleware;
 use Psr\Log\LoggerInterface;
 
@@ -23,12 +22,6 @@ class GuzzleHttpClient extends Client implements ClientInterface
         $this->httpLogAdapter = $httpLogAdapter;
 
         $config = ['timeout' => 60];
-        if ($this->debug) {
-            $config['handler'] = HandlerStack::create();
-            $config['handler']->push(
-                Middleware::log($this->httpLogAdapter, new MessageFormatter(MessageFormatter::DEBUG))
-            );
-        }
 
         parent::__construct($config);
     }
@@ -38,11 +31,7 @@ class GuzzleHttpClient extends Client implements ClientInterface
      */
     public function getXmlRpcTransport()
     {
-
-        $adapter = new \Http\Adapter\Guzzle6\Client($this);
-
-        return new HttpAdapterTransport(new \Http\Message\MessageFactory\DiactorosMessageFactory(),
-            $adapter);
+        return new GuzzleBridge(new \Guzzle\Http\Client());
     }
 
     /**
@@ -66,7 +55,7 @@ class GuzzleHttpClient extends Client implements ClientInterface
         }
 
         try {
-            $request  = new Request($method, $uri, $options['headers'], $options['body']);
+            $request = $this->createRequest($method, $uri,$options);
             $response = $this->send($request);
 
             return $response->getBody();
